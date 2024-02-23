@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 public class Course {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer courseId;
     private String courseCode;
     private String courseName; //full actual course name
     private String department;
