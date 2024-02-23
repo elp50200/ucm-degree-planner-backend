@@ -1,13 +1,13 @@
 <configuration>
     <!-- Define a property for the log path -->
-    <property name="LOG_PATH" value="C:\Users\ericp\IdeaProjects\degreePlanner" />
+    <property name="LOG_PATH" value="logs" />
 
     <!-- File Appender -->
     <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/degreePlanner.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/degreePlanner-%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>14</maxHistory>
+            <maxHistory>1</maxHistory>
         </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
