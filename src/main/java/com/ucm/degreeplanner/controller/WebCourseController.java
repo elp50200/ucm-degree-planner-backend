@@ -1,6 +1,10 @@
 package com.ucm.degreeplanner.controller;
 
+import com.ucm.degreeplanner.domain.Schedule;
 import com.ucm.degreeplanner.domain.User;
+import com.ucm.degreeplanner.domain.WebCourse;
+import com.ucm.degreeplanner.service.CourseService;
+import com.ucm.degreeplanner.service.ScheduleService;
 import com.ucm.degreeplanner.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -16,18 +20,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class WebCourseController {
-
-
-    private final UserService userService;
+    private final ScheduleService scheduleService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/request/addToSchedule")
-    public ResponseEntity addUser(@RequestBody User user) {
+    public ResponseEntity addToSchedule(@RequestBody WebCourse enrollmentData) {
         try {
-            //userService.create(user);
+            scheduleService.addToSchedule(enrollmentData);
             return new ResponseEntity(HttpStatus.CREATED);
         } catch (Exception e) {
-            logger.error("There was an unexpected error with the userController/user/addUser :" + e);
+            logger.error("There was an error with /request/addToSchedule :" + e);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/request/removeFromSchedule")
+    public ResponseEntity removeFromSchedule(@RequestBody WebCourse data) {
+        try {
+            scheduleService.removeFromSchedule(data);
+            return new ResponseEntity(HttpStatus.CREATED);
+        } catch (Exception e) {
+            logger.error("There was an error with /request/removeFromSchedule :" + e);
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }

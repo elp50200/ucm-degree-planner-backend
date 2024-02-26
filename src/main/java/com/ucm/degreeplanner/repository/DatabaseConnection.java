@@ -13,12 +13,12 @@ public class DatabaseConnection {
 
     public DatabaseConnection() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        System.out.println("Driver loaded");
+
 
         // Connect to a database
         Connection connection = DriverManager.getConnection
                 ("jdbc:mysql://localhost/degreeplanner" , "root", "root");
-        System.out.println("Database connected for userDAO");
+        System.out.println("Database connected");
 
         // Create a statement
         statement = connection.createStatement();

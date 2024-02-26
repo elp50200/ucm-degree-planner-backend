@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -32,21 +34,22 @@ public class CourseController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
-//
-//    @PostMapping("/course/removeCourse")
-//    public ResponseEntity removeCourse(@RequestBody)
-//    {
-//        try{
-//            return new ResponseEntity();
-//        }
-//        catch(Exception e){
-//            logger.error("There was an unexpected error with the FIX THIS :" +e);
-//            return new ResponseEntity();
-//        }
-//    }
-//
-    @PostMapping("/course/getCourse/{courseCode}")
+
+    @PostMapping("/course/removeCourse/{courseCode}")
     public ResponseEntity removeCourse(@PathVariable String courseCode)
+    {
+        try{
+            courseService.removeCourse(courseCode);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        catch(Exception e){
+            logger.error("There was an unexpected error with the FIX THIS :" +e);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/course/getCourse/{courseCode}")
+    public ResponseEntity getSingleCourse(@PathVariable String courseCode)
     {
         try{
             Course course = courseService.getSingleCourse(courseCode);
@@ -57,30 +60,32 @@ public class CourseController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
-//
-//    @PostMapping("/course/getAllCourse")
-//    public ResponseEntity removeCourse(@RequestBody)
-//    {
-//        try{
-//            return new ResponseEntity();
-//        }
-//        catch(Exception e){
-//            logger.error("There was an error with the FIX THIS :" +e);
-//            return new ResponseEntity();
-//        }
-//    }
-//
-//    @PostMapping("/course/getCourseOfYear/{year}")
-//    public ResponseEntity removeCourse(@PathVariable String year)
-//    {
-//        try{
-//            return new ResponseEntity();
-//        }
-//        catch(Exception e){
-//            logger.error("There was an unexpected error with the FIX THIS :" +e);
-//            return new ResponseEntity();
-//        }
-//    }
+
+    @PostMapping("/course/getAllCourse")
+    public ResponseEntity getAllCourses()
+    {
+        try{
+            ArrayList<Course> courses = courseService.getAllCourses();
+            return new ResponseEntity(courses,HttpStatus.OK);
+        }
+        catch(Exception e){
+            logger.error("There was an error with the FIX THIS :" +e);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/course/getCourseLevel/{level}")
+    public ResponseEntity getCourseLevel(@PathVariable String level)
+    {
+        try{
+            ArrayList<Course> courses = courseService.getCourseLevel(level);
+            return new ResponseEntity(courses,HttpStatus.OK);
+        }
+        catch(Exception e){
+            logger.error("There was an unexpected error with the FIX THIS :" +e);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
 
 //get available classes based on year

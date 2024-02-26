@@ -20,12 +20,17 @@ public class UserService {
     // Create a logger for the class
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     public User create(User user){
+        user.setRole(user.getRole().toLowerCase());
         return userRepository.save(user);
     }
 
-    public User getUser(String username)
+    public User getUserByUsername(String username)
     {
         return userRepository.findByUsername(username);
+    }
+
+    public User getUserByStudentNumber(String studentNumber) {
+        return userRepository.findByStudentNumber(studentNumber);
     }
 
     public boolean checkUserLogin(String username, String password) throws Exception{

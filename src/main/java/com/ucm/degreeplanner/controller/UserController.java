@@ -36,7 +36,7 @@ public class UserController {
             boolean validLogin = userService.checkUserLogin(user.getUsername(), user.getPassword());
 
             if (validLogin) {
-                User goodUser = userService.getUser(user.getUsername());
+                User goodUser = userService.getUserByUsername(user.getUsername());
                 return new ResponseEntity(goodUser, HttpStatus.OK);
             }
             else {
