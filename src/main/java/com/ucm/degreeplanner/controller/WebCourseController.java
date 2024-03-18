@@ -11,10 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -44,34 +43,17 @@ public class WebCourseController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
-}
-//
-//    @PostMapping("/request/removeFromSchedule")
-//    public ResponseEntity removeCourse(@RequestBody User user)
-//    {
-//        try{
-//
-//            userService.create(user);
-//            return new ResponseEntity(HttpStatus.OK);
-//        }
-//        catch(Exception e){
-//            logger.error("There was an unexpected error with the FIX THIS :" +e);
-//            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-//        }
-//    }
-//
-//    @PostMapping("/request/getSchedule")
-//    public ResponseEntity removeCourse(@RequestBody User user)
-//    {
-//        try{
-//            userService.create(user);
-//            return new ResponseEntity(HttpStatus.OK);
-//        }
-//        catch(Exception e){
-//            logger.error("There was an unexpected error with the FIX THIS :" +e);
-//            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-//        }
-//    }
+
+    @GetMapping("/request/getSchedule/{studentNumber}")
+    public ResponseEntity getSchedule(@PathVariable String studentNumber) {
+        try {
+            List list = scheduleService.getSchedule(studentNumber);
+            return new ResponseEntity(list, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("There was an unexpected error with the FIX THIS :" + e);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
 //
 //    @PostMapping("/request/setSchedule")
 //    public ResponseEntity removeCourse(@RequestBody User user)
@@ -99,7 +81,7 @@ public class WebCourseController {
 //        }
 //    }
 //}
-
+}
 
 //get schedule
 //post schedule

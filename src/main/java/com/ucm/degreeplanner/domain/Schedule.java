@@ -16,9 +16,9 @@ public class Schedule {
     private Integer enrollmentID;
     private String enrolledSemester;
     @ManyToOne
-    @JoinColumn(name = "userID")
-    private User userID;
+    @JoinColumn(name = "studentNumber")
+    private User user;
     @ManyToOne
     @JoinColumn(name = "courseCode")
-    private Course courseCode;
+    private Course course;
 }
