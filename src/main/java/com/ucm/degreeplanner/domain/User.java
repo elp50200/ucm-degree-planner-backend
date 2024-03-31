@@ -26,6 +26,8 @@ public class User {
     private String role;
     private String catalogYear;
 
+    private byte[] salt;
+
 
 //    @OneToMany(mappedBy = "user")
 //    @JsonIgnore
