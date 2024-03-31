@@ -1,10 +1,7 @@
 package com.ucm.degreeplanner.service;
 
 import com.ucm.degreeplanner.controller.UserController;
-import com.ucm.degreeplanner.domain.Course;
-import com.ucm.degreeplanner.domain.Schedule;
-import com.ucm.degreeplanner.domain.User;
-import com.ucm.degreeplanner.domain.WebCourse;
+import com.ucm.degreeplanner.domain.*;
 import com.ucm.degreeplanner.repository.CourseDAO;
 import com.ucm.degreeplanner.repository.ScheduleDAO;
 import com.ucm.degreeplanner.repository.ScheduleRepository;
@@ -69,6 +66,23 @@ public class ScheduleService {
         catch(Exception e)
         {
             throw e;
+        }
+    }
+    public void bulkSchedule(BulkSchedule enrollmentData) throws Exception {
+        User user = userService.getUserByStudentNumber(enrollmentData.getStudentNumber());
+        if (user != null || !user.equals("") || enrollmentData.getCourses().length != 0){
+            Schedule schedule = new Schedule();
+            schedule.setUser(user);
+            schedule.setEnrolledSemester(enrollmentData.getAcademicSemester());
+            for(int i=0;i<enrollmentData.getCourses().length;i++){
+                Course course = courseService.getSingleCourse(enrollmentData.getCourses()[i]);
+                schedule.setCourse(course);
+
+                scheduleDAO.add(schedule);
+            }
+        }
+        else{
+            throw new Exception("The user or course are null");
         }
     }
 }

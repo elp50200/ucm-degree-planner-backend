@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,7 +18,9 @@ public class CourseDAO extends DatabaseConnection {
     }
 
     public Course getSingleCourse(String courseCode) throws Exception {
-        String query = "Select * from courses where course_code = '"+courseCode+"';";
+        String query = "Select * from courses where course_code = '?';";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, courseCode);
         try{
             Course course = new Course();
             ResultSet resultSet = statement.executeQuery(query);
@@ -64,7 +67,9 @@ public class CourseDAO extends DatabaseConnection {
     }
 
     public ArrayList<Course> getCourseLevel(int level) throws Exception {
-        String query = "Select * from courses where requirement_level = '" + level + "';";
+        String query = "Select * from courses where requirement_level = '?';";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, level);
         try{
             ArrayList<Course> courses = new ArrayList<>();
             ResultSet resultSet = statement.executeQuery(query);

@@ -1,5 +1,6 @@
 package com.ucm.degreeplanner.controller;
 
+import com.ucm.degreeplanner.domain.BulkSchedule;
 import com.ucm.degreeplanner.domain.Schedule;
 import com.ucm.degreeplanner.domain.User;
 import com.ucm.degreeplanner.domain.WebCourse;
@@ -51,6 +52,17 @@ public class WebCourseController {
             return new ResponseEntity(list, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("There was an unexpected error with the FIX THIS :" + e);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/request/BulkSchedule")
+    public ResponseEntity bulkSchedule(@RequestBody BulkSchedule enrollmentData) {
+        try {
+            scheduleService.bulkSchedule(enrollmentData);
+            return new ResponseEntity(HttpStatus.CREATED);
+        } catch (Exception e) {
+            logger.error("There was an error with /request/addToSchedule :" + e);
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }

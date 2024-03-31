@@ -76,6 +76,18 @@ public class ScheduleDAO extends DatabaseConnection {
         }
         return list;
     }
+
+    public void add(Schedule schedule) throws SQLException {
+        String query = "INSERT into schedules (enrolled_semester,course_code,student_number) VALUES (?,?,?);";
+
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, schedule.getEnrolledSemester());
+        preparedStatement.setString(2, schedule.getCourse().getCourseCode());
+        preparedStatement.setString(3, schedule.getUser().getStudentNumber());
+
+        preparedStatement.execute();
+
+    }
 }
 
 //enrolled_semester;
