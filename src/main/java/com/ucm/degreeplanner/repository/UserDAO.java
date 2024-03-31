@@ -33,16 +33,15 @@ public class UserDAO extends DatabaseConnection{
 //        statement = connection.createStatement();
 //    }
     public boolean updateUser(User user){
-        String query = " Update users " + "set " +
+        String query = " Update users set " +
                 "username = '"+user.getUsername()+"' " +
                 ",password = '"+user.getPassword()+"' "+
                 ",email_address = '"+user.getEmailAddress()+"' "+
-//                ",student_number = '"+user.getStudentNumber()+"' "+
                 ",fname= '"+user.getFname()+"' "+
                 ",lname = '"+user.getLname()+"' "+
                 ",role = '"+user.getRole()+"' "+
                 ",catalog_year = '"+user.getCatalogYear()+"' "+
-                "where userid = '"+user.getUserID()+"';";
+                "where student_number = '"+user.getStudentNumber()+"';";
         try{
             statement.executeUpdate(query);
             logger.info("User "+user.getStudentNumber()+" was updated");

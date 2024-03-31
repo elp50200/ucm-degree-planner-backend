@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 
 @RequiredArgsConstructor
@@ -21,6 +24,13 @@ public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     public User create(User user){
         user.setRole(user.getRole().toLowerCase());
+
+        // Hash the password with the salt
+        byte[] salt = generateSalt();
+        String hashedPassword = hashPassword(user.getPassword(), salt);
+
+        user.setPassword(hashedPassword);
+        user.setSalt(salt);
         return userRepository.save(user);
     }
 
@@ -46,7 +56,7 @@ public class UserService {
 
 
             User user = userRepository.findByUsername(username);
-            if (password.equals(user.getPassword())) {
+            if (verifyPassword(password, user.getPassword(), user.getSalt())) {
                 logger.info("User: " + username + " has been found and password matches");
                 return true;
             } else {
@@ -75,11 +85,15 @@ public class UserService {
                     throw new Exception("A invalid/dangerous character has been detected on " + LocalDate.now() +" and the process updateUserInformation for username has been stopped.");
                 }
             }
-            // Password
+            // Password & Salt
             if(userUpdates.getPassword() != null){
                 String sanitizedPassword = preventSQLInjection(userUpdates.getPassword());
                 if(userUpdates.getPassword().equals(sanitizedPassword)) {
-                    userCurrent.setPassword(userUpdates.getPassword());
+                    byte[] salt = generateSalt();
+                    String hashedPassword = hashPassword(userUpdates.getPassword(), salt);
+
+                    userCurrent.setPassword(hashedPassword);
+                    userCurrent.setSalt(salt);
                 } else {
                     throw new Exception("A invalid/dangerous character has been detected on " + LocalDate.now() + " and the process updateUserInformation for password has been stopped.");
                 }
@@ -94,16 +108,6 @@ public class UserService {
                     throw new Exception("A invalid/dangerous character has been detected on " + LocalDate.now() + " and the process updateUserInformation for email address has been stopped.");
                 }
             }
-
-            // Student Number
-//            if(userUpdates.getStudentNumber() != null){
-//                String sanitizedStudentNumber = preventSQLInjection(userUpdates.getStudentNumber());
-//                if(userUpdates.getStudentNumber().equals(sanitizedStudentNumber)) {
-//                    userCurrent.setStudentNumber(userUpdates.getStudentNumber());
-//                } else {
-//                    throw new Exception("A invalid/dangerous character has been detected on " + LocalDate.now() + " and the process updateUserInformation for student number has been stopped.");
-//                }
-//            }
 
             // fname
             if(userUpdates.getFname() != null){
@@ -172,5 +176,34 @@ public class UserService {
         String sanitizedInput = input.replaceAll(regex, "XXX");
 
         return sanitizedInput;
+    }
+
+    // Method to generate a random salt
+    private byte[] generateSalt() {
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+        return salt;
+    }
+
+    // Method to hash the password with the salt
+    private String hashPassword(String password, byte[] salt) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(salt);
+            byte[] hashedBytes = md.digest(password.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    private boolean verifyPassword(String password, String hashedPassword, byte[] salt) {
+        String hashedInput = hashPassword(password, salt);
+        return hashedInput.equals(hashedPassword);
     }
 }

@@ -36,7 +36,10 @@ public class UserController {
             boolean validLogin = userService.checkUserLogin(user.getUsername(), user.getPassword());
 
             if (validLogin) {
+                //TODO Rework this logic. I hate it
                 User goodUser = userService.getUserByUsername(user.getUsername());
+                goodUser.setPassword(null);
+                goodUser.setSalt(null);
                 return new ResponseEntity(goodUser, HttpStatus.OK);
             }
             else {

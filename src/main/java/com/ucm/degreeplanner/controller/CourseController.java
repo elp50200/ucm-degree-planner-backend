@@ -48,7 +48,7 @@ public class CourseController {
         }
     }
 
-    @PostMapping("/course/getCourse/{courseCode}")
+    @GetMapping("/course/getCourse/{courseCode}")
     public ResponseEntity getSingleCourse(@PathVariable String courseCode)
     {
         try{
@@ -61,7 +61,7 @@ public class CourseController {
         }
     }
 
-    @PostMapping("/course/getAllCourse")
+    @GetMapping("/course/getAllCourse")
     public ResponseEntity getAllCourses()
     {
         try{
@@ -74,7 +74,7 @@ public class CourseController {
         }
     }
 
-    @PostMapping("/course/getCourseLevel/{level}")
+    @GetMapping("/course/getCourseLevel/{level}")
     public ResponseEntity getCourseLevel(@PathVariable String level)
     {
         try{

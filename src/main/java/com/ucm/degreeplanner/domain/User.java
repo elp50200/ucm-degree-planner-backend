@@ -14,16 +14,19 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userID;
+    private String studentNumber;
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Integer userID;
     private String username;
     private String password;
     private String emailAddress;
-    private String studentNumber;
+
     private String fname;
     private String lname;
     private String role;
     private String catalogYear;
+
+    private byte[] salt;
 
 
 //    @OneToMany(mappedBy = "user")

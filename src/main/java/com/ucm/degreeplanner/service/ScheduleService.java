@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class ScheduleService {
@@ -29,8 +31,8 @@ public class ScheduleService {
         User user = userService.getUserByStudentNumber(enrollmentData.getStudentNumber());
         if (user != null && course != null) {
             Schedule schedule = new Schedule();
-            schedule.setCourseCode(course);
-            schedule.setUserID(user);
+            schedule.setCourse(course);
+            schedule.setUser(user);
             schedule.setEnrolledSemester(enrollmentData.getAcademicSemester());
             scheduleRepository.save(schedule);
         }
@@ -44,13 +46,29 @@ public class ScheduleService {
         User user = userService.getUserByStudentNumber(data.getStudentNumber());
         if (user != null && course != null) {
             Schedule schedule = new Schedule();
-            schedule.setCourseCode(course);
-            schedule.setUserID(user);
+            schedule.setCourse(course);
+            schedule.setUser(user);
             schedule.setEnrolledSemester(data.getAcademicSemester());
             scheduleDAO.removeFromSchedule(schedule);
         }
         else{
             throw new Exception("The user or course are null");
+        }
+    }
+    public List<WebCourse> getSchedule(String studentNumber) throws Exception {
+        try {
+
+            List list = scheduleDAO.getSchedule(studentNumber);
+
+            if (!list.isEmpty()) {
+                return list;
+            } else {
+                throw new Exception("No schedule was found for user: " + studentNumber);
+            }
+        }
+        catch(Exception e)
+        {
+            throw e;
         }
     }
 }
