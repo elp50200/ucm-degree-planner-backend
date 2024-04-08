@@ -1,12 +1,8 @@
 package com.ucm.degreeplanner.controller;
 
 import com.ucm.degreeplanner.domain.BulkSchedule;
-import com.ucm.degreeplanner.domain.Schedule;
-import com.ucm.degreeplanner.domain.User;
 import com.ucm.degreeplanner.domain.WebCourse;
-import com.ucm.degreeplanner.service.CourseService;
 import com.ucm.degreeplanner.service.ScheduleService;
-import com.ucm.degreeplanner.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,53 +47,19 @@ public class WebCourseController {
             List list = scheduleService.getSchedule(studentNumber);
             return new ResponseEntity(list, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("There was an unexpected error with the FIX THIS :" + e);
+            logger.error("There was an unexpected error with /request/getSchedule/{studentNumber} :" + e);
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PostMapping("/request/BulkSchedule")
-    public ResponseEntity bulkSchedule(@RequestBody BulkSchedule enrollmentData) {
+    @PostMapping("/request/bulkSchedule/semester/{startSemester}")
+    public ResponseEntity bulkSchedule(@RequestBody BulkSchedule enrollmentData, @PathVariable String startSemester) {
         try {
-            scheduleService.bulkSchedule(enrollmentData);
+            scheduleService.bulkSchedule(enrollmentData, startSemester);
             return new ResponseEntity(HttpStatus.CREATED);
         } catch (Exception e) {
-            logger.error("There was an error with /request/addToSchedule :" + e);
+            logger.error("There was an error with /request/bulkSchedule/semester/{startSemester} :" + e);
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
-//
-//    @PostMapping("/request/setSchedule")
-//    public ResponseEntity removeCourse(@RequestBody User user)
-//    {
-//        try{
-//            userService.create(user);
-//            return new ResponseEntity(HttpStatus.OK);
-//        }
-//        catch(Exception e){
-//            logger.error("There was an unexpected error with the FIX THIS :" +e);
-//            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-//        }
-//    }
-//
-//    @PostMapping("/request/updateSchedule")
-//    public ResponseEntity removeCourse(@RequestBody User user)
-//    {
-//        try{
-//            userService.create(user);
-//            return new ResponseEntity(HttpStatus.OK);
-//        }
-//        catch(Exception e){
-//            logger.error("There was an unexpected error with the FIX THIS :" +e);
-//            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-//        }
-//    }
-//}
 }
-
-//get schedule
-//post schedule
-//update schedule
-//add class to schedule
-//remove class from schedule
-//update course(could pull entire course on frontend then update the information - longterm)

@@ -43,6 +43,10 @@ public class UserService {
         return userRepository.findByStudentNumber(studentNumber);
     }
 
+    /*
+    This is the service layer for checkUserLogin
+    This method checks the user's login attempt and returns a boolean value
+     */
     public boolean checkUserLogin(String username, String password) throws Exception{
         try
         {
@@ -51,6 +55,7 @@ public class UserService {
                 logger.info("Strings are valid and do not attempt to inject the database");
             }
             else{
+                logger.error("A invalid/dangerous character has been detected on " + LocalDate.now() +" and the process checkUserLogin has been stopped.");
                 throw new Exception("A invalid/dangerous character has been detected on " + LocalDate.now() +" and the process checkUserLogin has been stopped.");
             }
 
@@ -69,7 +74,10 @@ public class UserService {
             return false;
         }
     }
-
+    /*
+    This is the service layer for updateUserInformation
+    This method sanitizes all inputs and sets it to a new user object then sent to the database
+     */
     public boolean updateUserInformation(User userUpdates) throws Exception{
         try {
             //pull in current data for user
@@ -202,6 +210,7 @@ public class UserService {
             return null;
         }
     }
+    //Method to check password against encoded password
     private boolean verifyPassword(String password, String hashedPassword, byte[] salt) {
         String hashedInput = hashPassword(password, salt);
         return hashedInput.equals(hashedPassword);

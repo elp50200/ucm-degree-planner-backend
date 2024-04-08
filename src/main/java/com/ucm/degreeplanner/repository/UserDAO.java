@@ -11,27 +11,16 @@ import java.sql.*;
 @Repository
 public class UserDAO extends DatabaseConnection{
 
-//    private Statement statement;
     private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);
 
     public UserDAO() throws ClassNotFoundException, SQLException {
     }
-
-    //    public UserDAO() throws ClassNotFoundException, SQLException {
-//        Class.forName("com.mysql.cj.jdbc.Driver");
-//        //System.out.println("Driver loaded");
-//
-//        // Connect to a database
-//        Connection connection = DriverManager.getConnection
-//                ("jdbc:mysql://localhost/degreeplanner" , "root", "root");
-//        //System.out.println("Database connected for userDAO");
-//
-//        // Create a statement
-//        statement = connection.createStatement();
-//    }
+    /*
+    This is a SQL call using a prepared statement that updates all user information for one student
+    */
     public boolean updateUser(User user) throws SQLException {
-        String query = " Update users set " + "username = '?' ,password = '?' ,email_address = '?' ,"
-                + "fname= '?' ,lname = '?' ,role = '?' ,catalog_year = '?' where student_number = '?';";
+        String query = " Update users set " + "username = ?, password = ?, email_address = ?, "
+                + "fname= ?, lname = ?, role = ?, catalog_year = ? where student_number = ?;";
 
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, user.getUsername());
@@ -53,12 +42,3 @@ public class UserDAO extends DatabaseConnection{
         }
     }
 }
-//userID;
-//username;
-//password;
-//emailAddress;
-//studentNumber;
-//fname;
-//lname;
-//role;
-//catalogYear;

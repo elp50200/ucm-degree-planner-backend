@@ -25,7 +25,7 @@ public class UserController {
             return new ResponseEntity(HttpStatus.CREATED);
         }
         catch(Exception e){
-            logger.error("There was an unexpected error with the userController/user/addUser :" +e);
+            logger.error("There was an unexpected error with the /user/addUser :" +e);
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
@@ -47,7 +47,7 @@ public class UserController {
             }
         }
         catch(Exception e){
-            logger.error("There was an unexpected error with the userController/user/checkUserLogin :" +e);
+            logger.error("There was an unexpected error with the /user/checkUserLogin :" +e);
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
@@ -64,7 +64,7 @@ public class UserController {
             }
         }
         catch(Exception e){
-            logger.error("There was an unexpected error with the userController/user/updateUser :" +e);
+            logger.error("There was an unexpected error with the /user/updateUser :" +e);
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }

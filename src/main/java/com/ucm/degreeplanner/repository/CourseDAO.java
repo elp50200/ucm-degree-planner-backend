@@ -17,8 +17,11 @@ public class CourseDAO extends DatabaseConnection {
     public CourseDAO() throws ClassNotFoundException, SQLException {
     }
 
+    /*
+    This is a SQL call using a prepared statement that gets a single course based on the course_code on the database
+     */
     public Course getSingleCourse(String courseCode) throws Exception {
-        String query = "Select * from courses where course_code = '?';";
+        String query = "Select * from courses where course_code = ?;";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, courseCode);
         try{
@@ -37,11 +40,14 @@ public class CourseDAO extends DatabaseConnection {
             return course;
         }
         catch(SQLException e){
-            logger.error("There was an SQL error in retrieving course with a courseCode of  "+courseCode+" with query: "+query + "ERROR: "+e);
+            logger.error("There was a SQL error in retrieving course with a courseCode of  "+courseCode+" with query: "+query + "ERROR: "+e);
             throw new Exception(e);
         }
     }
 
+    /*
+    This is a SQL call that gets all data for the courses in the table
+    */
     public ArrayList<Course> getAllCourses() throws Exception {
         String query = "Select * from courses;";
         try{
@@ -61,13 +67,16 @@ public class CourseDAO extends DatabaseConnection {
             return courses;
         }
         catch(SQLException e){
-            logger.error("There was a problem in collecting all courses from the database");
+            logger.error("There was a SQL error in collecting all courses from the database with query: "+query + "ERROR: "+e);
             throw new Exception(e);
         }
     }
 
+    /*
+    This is a SQL call using a prepared statement that gets all the courses data where the requirement_level matches
+     */
     public ArrayList<Course> getCourseLevel(int level) throws Exception {
-        String query = "Select * from courses where requirement_level = '?';";
+        String query = "Select * from courses where requirement_level = ?;";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setInt(1, level);
         try{
@@ -87,16 +96,8 @@ public class CourseDAO extends DatabaseConnection {
             return courses;
         }
         catch(SQLException e){
-            logger.error("There was a problem in collecting courses level " + level + " from the database");
+            logger.error("There was a SQL error in collecting courses level " + level + " from the database with query: "+query + "ERROR: "+e);
             throw new Exception(e);
         }
     }
 }
-
-//courseId;
-//courseCode;
-//courseName;
-//department;
-//semestersOffered;
-//requirementLevel;
-//prerequisites;
