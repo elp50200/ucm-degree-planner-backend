@@ -6,42 +6,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 @Repository
 public class UserDAO extends DatabaseConnection{
 
-//    private Statement statement;
     private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);
 
     public UserDAO() throws ClassNotFoundException, SQLException {
     }
+    /*
+    This is a SQL call using a prepared statement that updates all user information for one student
+    */
+    public boolean updateUser(User user) throws SQLException {
+        String query = " Update users set " + "username = ?, password = ?, email_address = ?, "
+                + "fname= ?, lname = ?, role = ?, catalog_year = ? where student_number = ?;";
 
-    //    public UserDAO() throws ClassNotFoundException, SQLException {
-//        Class.forName("com.mysql.cj.jdbc.Driver");
-//        //System.out.println("Driver loaded");
-//
-//        // Connect to a database
-//        Connection connection = DriverManager.getConnection
-//                ("jdbc:mysql://localhost/degreeplanner" , "root", "root");
-//        //System.out.println("Database connected for userDAO");
-//
-//        // Create a statement
-//        statement = connection.createStatement();
-//    }
-    public boolean updateUser(User user){
-        String query = " Update users set " +
-                "username = '"+user.getUsername()+"' " +
-                ",password = '"+user.getPassword()+"' "+
-                ",email_address = '"+user.getEmailAddress()+"' "+
-                ",fname= '"+user.getFname()+"' "+
-                ",lname = '"+user.getLname()+"' "+
-                ",role = '"+user.getRole()+"' "+
-                ",catalog_year = '"+user.getCatalogYear()+"' "+
-                "where student_number = '"+user.getStudentNumber()+"';";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, user.getUsername());
+        preparedStatement.setString(2, user.getPassword());
+        preparedStatement.setString(3, user.getEmailAddress());
+        preparedStatement.setString(4, user.getFname());
+        preparedStatement.setString(5, user.getLname());
+        preparedStatement.setString(6, user.getRole());
+        preparedStatement.setString(7, user.getCatalogYear());
+        preparedStatement.setString(8, user.getStudentNumber());
         try{
             statement.executeUpdate(query);
             logger.info("User "+user.getStudentNumber()+" was updated");
@@ -53,12 +42,3 @@ public class UserDAO extends DatabaseConnection{
         }
     }
 }
-//userID;
-//username;
-//password;
-//emailAddress;
-//studentNumber;
-//fname;
-//lname;
-//role;
-//catalogYear;

@@ -12,15 +12,6 @@ public class DatabaseConnection {
     public Statement statement = connection.createStatement();
 
     public DatabaseConnection() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-
-
-        // Connect to a database
-        Connection connection = DriverManager.getConnection
-                ("jdbc:mysql://localhost/degreeplanner" , "root", "root");
-        System.out.println("Database connected");
-
-        // Create a statement
-        statement = connection.createStatement();
     }
 }
+//This is a very rudimentary class to create connections for the DAO classes to use to make database calls

@@ -13,16 +13,13 @@ import lombok.NoArgsConstructor;
 public class Course {
 
     @Id
-    private String courseCode;
-    private String courseName; //full actual course name
-    private String department;
-    private String semestersOffered; // fall,spring,summer,fallspring,fallsummer,springsummer,all
-    private String requirementLevel; //1000,2000,3000,4000 or by expected student year. Not sure yet
+    private String courseCode; //Shortened course code
+    private String courseName; //Full course name
+    private String department; //Campus department
+    private String semestersOffered; // Fall,Spring,Summer,FallSpring,FallSummer,SpringSummer,All
+    private String requirementLevel; //1000,2000,3000,4000 or represented by the first number only
     private String prerequisites;  //this will be a string with classes separated by commas
-
-
-//    @OneToMany(mappedBy = "user")
-//    @JsonIgnore
-//    private List<ChangeRequest> ChangeRequests = new ArrayList<>();
-
 }
+/*
+This is a domain to match the course data in the backend to be used when sending data to the frontend
+ */

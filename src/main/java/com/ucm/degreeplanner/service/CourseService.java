@@ -19,28 +19,37 @@ public class CourseService {
 
     private final CourseDAO courseDAO;
     private final CourseRepository courseRepository;
-
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
+    /*
+    This is the service layer for the addCourse.
+    It makes sure the courseCode is set to all upper case before being stored in the database to ensure uniformity
+     */
     public void addCourse(Course course){
-        String courseCode = course.getCourseCode();
-        course.setCourseCode(courseCode.toUpperCase());
+        course.setCourseCode(course.getCourseCode().toUpperCase());
         courseRepository.save(course);
+        logger.info("Course has been added to the database.");
     }
+    /*
+    This is the service layer for removeCourse
+    This method removes a single course from the table
+     */
     public void removeCourse(String courseCode) throws Exception{
         courseCode = courseCode.toUpperCase();
-        logger.info("Attempting to remove course "+courseCode);
         courseRepository.delete(courseRepository.findCourseByCourseCode(courseCode));
         logger.info("Successfully removed course "+courseCode);
     }
-
+    /*
+    This is the service layer for getSingleCourse
+    This looks for one course based off the courseCode and returns it if found
+     */
     public Course getSingleCourse(String courseCode) throws Exception {
         try{
             courseCode = courseCode.toUpperCase();
             String sanitizedCode = preventSQLInjection(courseCode);
 
             if(!(courseCode.equals(sanitizedCode))) {
-                System.out.println(courseCode + " " + sanitizedCode);
+                logger.error("An SQLi attempt was stopped in getCourse with course code: " + courseCode);
                 throw new Exception("An SQLi attempt was stopped in getCourse with course code: " + courseCode);
             }
             else {
@@ -50,14 +59,19 @@ public class CourseService {
         }
         catch(Exception e)
         {
+            logger.error("A problem has occurred trying to retrieve a course.");
             throw new Exception(e);
         }
     }
-
+    /*
+    This is the service layer for getAllCourses
+    This method returns all courses from the database
+     */
     public ArrayList<Course> getAllCourses() throws Exception{
         ArrayList<Course> courses = courseDAO.getAllCourses();
         if(courses.isEmpty())
         {
+            logger.error("There were no courses retrieved in getAllCourses");
             throw new Exception("There were no courses retrieved in getAllCourses");
         }
         else
@@ -65,7 +79,10 @@ public class CourseService {
             return courses;
         }
     }
-
+    /*
+    This is the service layer for getCourseLevel
+    This method is not used in frontend however it returns all courses based on their requirement_level (eg 1xxx,2xxx,3xxx,4xxx)
+     */
     public ArrayList<Course> getCourseLevel(String level) throws Exception{
 
         System.out.println("level before slice "+ level);
@@ -85,7 +102,10 @@ public class CourseService {
         }
     }
 
-
+    /*
+    This is the service layer for preventSQLInjection
+    This is an old protection used to sanitize inputs from the frontend. It is still used in some places.
+     */
     private String preventSQLInjection(String input) {
         // Define a regular expression pattern to match potentially harmful characters
         String regex = "[;\\\\/'\"()|&%#@<>]";
@@ -96,10 +116,3 @@ public class CourseService {
         return sanitizedInput;
     }
 }
-
-//                String sanitizedCatalogYear = preventSQLInjection(userUpdates.getCatalogYear());
-//                if(userUpdates.getCatalogYear().equals(sanitizedCatalogYear)) {
-//                    userCurrent.setCatalogYear(userUpdates.getCatalogYear());
-//                } else {
-//                    throw new Exception("A invalid/dangerous character has been detected on " + LocalDate.now() + " and the process updateUserInformation for catalog year has been stopped.");
-//                }
