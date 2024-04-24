@@ -2,10 +2,8 @@ package com.ucm.degreeplanner.service;
 
 import com.ucm.degreeplanner.controller.UserController;
 import com.ucm.degreeplanner.domain.*;
-import com.ucm.degreeplanner.repository.CourseDAO;
 import com.ucm.degreeplanner.repository.ScheduleDAO;
 import com.ucm.degreeplanner.repository.ScheduleRepository;
-import com.ucm.degreeplanner.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +38,7 @@ public class ScheduleService {
             scheduleRepository.save(schedule);
         }
         else{
+            logger.info("There was an error in addToSchedule");
             throw new Exception("The user or course are null");
         }
     }

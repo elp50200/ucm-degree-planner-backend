@@ -59,7 +59,7 @@ public class CourseController {
         }
     }
 
-    @GetMapping("/course/getAllCourse")
+    @GetMapping("/course/getAllCourses")
     public ResponseEntity getAllCourses()
     {
         try{
