@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-import static com.mysql.cj.conf.PropertyKey.logger;
-
 @RequiredArgsConstructor
 @Service
 public class CourseService {
@@ -25,7 +23,8 @@ public class CourseService {
     This is the service layer for the addCourse.
     It makes sure the courseCode is set to all upper case before being stored in the database to ensure uniformity
      */
-    public void addCourse(Course course){
+
+    public void addCourse(Course course) throws Exception{
         course.setCourseCode(course.getCourseCode().toUpperCase());
         courseRepository.save(course);
         logger.info("Course has been added to the database.");
@@ -49,7 +48,7 @@ public class CourseService {
             String sanitizedCode = preventSQLInjection(courseCode);
 
             if(!(courseCode.equals(sanitizedCode))) {
-                logger.error("An SQLi attempt was stopped in getCourse with course code: " + courseCode);
+                logger.info("An SQLi attempt was stopped in getCourse with course code: " + courseCode);
                 throw new Exception("An SQLi attempt was stopped in getCourse with course code: " + courseCode);
             }
             else {
@@ -59,7 +58,7 @@ public class CourseService {
         }
         catch(Exception e)
         {
-            logger.error("A problem has occurred trying to retrieve a course.");
+            logger.info("A problem has occurred trying to retrieve a course.");
             throw new Exception(e);
         }
     }
@@ -71,7 +70,7 @@ public class CourseService {
         ArrayList<Course> courses = courseDAO.getAllCourses();
         if(courses.isEmpty())
         {
-            logger.error("There were no courses retrieved in getAllCourses");
+            logger.info("There were no courses retrieved in getAllCourses");
             throw new Exception("There were no courses retrieved in getAllCourses");
         }
         else
@@ -94,6 +93,7 @@ public class CourseService {
         ArrayList<Course> courses = courseDAO.getCourseLevel(levelNumber);
         if(courses.isEmpty())
         {
+            logger.info("There were no courses retrieved in getCourseLevel");
             throw new Exception("There were no courses retrieved in getCourseLevel");
         }
         else

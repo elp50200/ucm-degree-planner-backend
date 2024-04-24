@@ -1,10 +1,7 @@
 package com.ucm.degreeplanner.repository;
 
 import com.ucm.degreeplanner.domain.Schedule;
-import com.ucm.degreeplanner.domain.User;
 import com.ucm.degreeplanner.domain.WebCourse;
-import com.ucm.degreeplanner.service.CourseService;
-import com.ucm.degreeplanner.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -42,7 +39,7 @@ public class ScheduleDAO extends DatabaseConnection {
         if (rowsAffected > 0) {
             logger.info("Deleted "+rowsAffected+" rows");
         } else {
-            logger.error("Unable to find schedule to delete");
+            logger.info("Unable to find schedule to delete");
             throw new SQLException("Unable to find schedule to delete");
         }
         preparedStatement.close();
@@ -74,7 +71,7 @@ public class ScheduleDAO extends DatabaseConnection {
         }
         catch(Exception e){
             preparedStatement.close();
-            logger.error("There was a SQL error in getting the schedules for student "+studentNumber+" with query "+query + "ERROR: "+e);
+            logger.info("There was a SQL error in getting the schedules for student "+studentNumber+" with query "+query + "ERROR: "+e);
             throw new SQLException(e);
         }
     }
@@ -90,7 +87,13 @@ public class ScheduleDAO extends DatabaseConnection {
         preparedStatement.setString(2, schedule.getCourse().getCourseCode());
         preparedStatement.setString(3, schedule.getUser().getStudentNumber());
 
-        preparedStatement.execute();
+        try{
+            preparedStatement.execute();
+        }
+        catch(SQLException e){
+            logger.info("There was an error adding a course to a students schedule");
+            throw new SQLException(e);
+        }
     }
 
     /*
@@ -105,13 +108,19 @@ public class ScheduleDAO extends DatabaseConnection {
         preparedStatement.setString(1, schedule.getCourse().getCourseCode());
         preparedStatement.setString(2, schedule.getUser().getStudentNumber());
 
-        ResultSet resultSet = preparedStatement.executeQuery();
+        try{
+            ResultSet resultSet = preparedStatement.executeQuery();
 
-        if(resultSet.next())
-        {
-            courseExist = true;
+            if(resultSet.next())
+            {
+                courseExist = true;
+            }
+
+            return courseExist;
         }
-
-        return courseExist;
+        catch(SQLException e){
+            logger.info("There was an error in checking if a course exists");
+            throw new SQLException(e);
+        }
     }
 }
